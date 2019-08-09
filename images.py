@@ -27,12 +27,12 @@ class Images(commands.Cog):
         @commands.command(name=name,
                           description=helptext)
         async def function(self, ctx):
-            cmd_name = "owl"
+            cmd_name = name
             folder = "{}/{}/".format(DATA_DIR, cmd_name)
             filename = random.choice(os.listdir(folder))
             log.info(filename)
             await ctx.message.channel.send(file=discord.File(os.path.join(folder, filename)))
-            await ctx.send(name)
+            # await ctx.send(name)
 
         function.cog = self
         self.bot.add_command(function)
