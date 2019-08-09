@@ -46,20 +46,6 @@ async def reboot(ctx):
     await bot.close()
 
 
-@bot.command()
-async def owl(ctx):
-    """
-    owl
-
-    Fancy owl pics
-    """
-    cmd_name = "owl"
-    folder = "{}/{}/".format(DATA_DIR, cmd_name)
-    filename = random.choice(os.listdir(folder))
-    log.info(filename)
-    await ctx.message.channel.send(file=discord.File(os.path.join(folder, filename)))
-
-
 @bot.event
 async def on_ready():
     print('We have logged in as {0.user}'.format(bot))
