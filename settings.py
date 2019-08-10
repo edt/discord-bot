@@ -11,11 +11,13 @@ class Settings():
 
         self.token = None
         self.data_dir = None
+        self.restart_scheduled = False
         self.load_defaults()
 
     def load_defaults(self):
         self.token = None
         self.data_dir = None
+        self.restart_scheduled = False
 
     def load(self, configfile):
 
