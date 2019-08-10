@@ -55,3 +55,18 @@ Purge cache before starting.
 #### --data <directory>
 
 Local directory for permanent local data.
+
+## Config File
+
+The default configuration file is called setting.ini.  
+It typically resides in the directory of discord-bot.  
+
+Alternative location can be specified with `--config`.
+
+The content should look like:
+
+```INI
+[General]
+token = discord-bot-oauth-token
+data_dir = /usr/data/stuff
+```
