@@ -1,12 +1,16 @@
 #!/usr/bin/env python3
 
-import sys
-import os
-import discord
-from discord.ext import commands
 import argparse
-import random
 import logging
+import os
+import random
+import sys
+import shutil
+import discord
+import time
+
+import settings
+from discord.ext import commands
 
 log = logging.getLogger(__name__)
 
@@ -15,9 +19,7 @@ bot = commands.Bot(command_prefix='!',
 
 reboot_is_scheduled = False
 
-TOKEN = ""
-DATA_DIR = ""
-
+startTime = time.time()
 
 @bot.command()
 async def hello(ctx):
@@ -45,6 +47,56 @@ async def reboot(ctx):
     # closes main loop. actual reboot has to be done there
     await bot.close()
 
+@bot.command()
+async def status(ctx):
+    """
+    Give server/bot state.
+
+    Given information include:
+    Uptime
+    Available disk space
+    Available images
+    """
+
+    def get_uptime():
+        """
+        Returns the number of seconds since the program started.
+        """
+        # do return startTime if you just want the process start time
+        return time.time() - startTime
+
+    def uptime_to_str(secs):
+        mins, secs = divmod(secs, 60)
+        hours, mins = divmod(mins, 60)
+        days, hours = divmod(hours, 24)
+        return 'D:%d H:%02d M:%02d S:%02d' % (days, hours, mins, secs)
+
+    def get_size(start_path = '.'):
+        total_size = 0
+        for dirpath, dirnames, filenames in os.walk(start_path):
+            for f in filenames:
+                fp = os.path.join(dirpath, f)
+                # skip if it is symbolic link
+                if not os.path.islink(fp):
+                    total_size += os.path.getsize(fp)
+        return total_size
+
+    folder_size = get_size(settings.config.data_dir)
+    disk_total, disk_used, disk_free = shutil.disk_usage(settings.config.data_dir)
+
+    status_msg = """
+    I am alive! But you already knew that....
+
+    Uptime: {time}
+
+    Static data: {data:6.4f} GB
+    Free disk space: {disk:6.4f} GB
+    """.format(data=folder_size / (1024.0**3),
+             disk=(disk_free / (1024.0**3)),
+             time=uptime_to_str(get_uptime()))
+
+    await ctx.send(status_msg)
+
 
 @bot.event
 async def on_ready():
@@ -59,7 +111,7 @@ def init():
     class FullPaths(argparse.Action):
         """Expand user- and relative-paths"""
         def __call__(self, parser, namespace, values, option_string=None):
-            setattr(namespace, self.dest, os.path.abspath(os.path.expanduser(values)))
+            setattr(namespace, self.dest, str(os.path.abspath(os.path.expanduser(values))))
 
     def is_dir(dirname):
         """Checks if a path is an actual directory"""
@@ -70,6 +122,7 @@ def init():
             return dirname
 
     # end helper
+    script_path = os.path.dirname(os.path.abspath( __file__ ))
 
     parser = argparse.ArgumentParser(description="Discord Bot script")
     parser.add_argument("-v", help="Increase log level. Max=5",
@@ -77,11 +130,16 @@ def init():
     parser.add_argument("--reset", help="Purge cache before starting",
                         action="store_true")
     parser.add_argument("--config", "-c", help="Explicitly use config",
-                        action="store", type=argparse.FileType('r'), dest="config")
+                        action="store", type=argparse.FileType('r'), 
+                        dest="config", default=str(os.path.join(script_path, "settings.ini")))
     parser.add_argument("--data", help="Data dir to use",
-                        action=FullPaths, type=is_dir)
+                        action=FullPaths, type=is_dir, 
+                        default=os.path.join(script_path, "data"))
 
     arguments = parser.parse_args()
+
+    settings.init(str(arguments.config.name))
+
 
     # set default logging level to WARN. each new -v increases the log level
     level = max(3 - arguments.verbose_count, 0) * 10
@@ -98,7 +156,7 @@ def main():
     bot.load_extension("general")
     bot.load_extension("images")
 
-    bot.run(TOKEN)
+    bot.run(settings.config.token)
 
     if reboot_is_scheduled:
         os.execv(__file__, sys.argv)
