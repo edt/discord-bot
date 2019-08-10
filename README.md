@@ -10,9 +10,26 @@ The following is a list of features the bot has:
 - [ ] reminder function to ping one or more people   
   `!remind "Schnitzel" "datetime" @user1 @user2`
   
-- [ ] upload command to create new commands and/or add images to existing ones  
+- [x] upload command to create new commands and/or add images to existing ones  
   `!upload <command> <url>`  
   Command should give warning if file is larger than 8 MB.
+- [x] status command to retrieve info about server/bot
+
+## Available commands
+
+For general info or info about a specific command call `!help` or `!help command`.
+
+`!help` - print info for user
+
+`!status` - give a status overview over the server/bot 
+
+`!upload <cmd> <url>` - upload an image/video to the cmd. If the command does not exist it will automatically be created 
+
+`!reboot` - reboot the bot
+
+Commands of the category 'Images' are automatically generated and thus not documented.
+
+These commands will randomly pick an image from a folder associated with the command and post it to the channel where the command was issued.
   
 
 ## Commandline Usage
