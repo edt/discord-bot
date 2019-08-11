@@ -33,6 +33,14 @@ async def on_ready():
     log.info('We have logged in as {0.user}'.format(bot))
 
 
+@bot.event
+async def on_command_error(ctx, error):
+    if isinstance(error, discord.ext.commands.errors.CommandNotFound):
+        await ctx.send("```Command not found error: {}```".format(error))
+        return
+    raise error
+
+
 def init():
     """"""
 
