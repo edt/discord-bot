@@ -1,6 +1,7 @@
 import configparser
 import logging
 import os
+import time
 
 log = logging.getLogger(__file__)
 
@@ -39,6 +40,9 @@ class Settings():
 
 def init(configfile):
     
+    global start_time
+    start_time = time.time()
+
     global config
     config = Settings()
     if not config.load(configfile):
