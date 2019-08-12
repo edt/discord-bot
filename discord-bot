@@ -60,7 +60,7 @@ def init():
             return dirname
 
     # end helper
-    script_path = os.path.dirname(os.path.abspath __file__))
+    script_path = os.path.dirname(os.path.abspath(__file__))
 
     parser = argparse.ArgumentParser(description="Discord Bot script")
     parser.add_argument("-v", help="Increase log level. Max=5",
