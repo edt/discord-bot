@@ -35,11 +35,12 @@ class Settings():
 
         self.token = gen.get("token", self.token)
         self.data_dir = gen.get("data_dir", self.data_dir)
-        
+
         return True
 
+
 def init(configfile):
-    
+
     global start_time
     start_time = time.time()
 

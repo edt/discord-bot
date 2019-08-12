@@ -25,7 +25,7 @@ class Images(commands.Cog):
     async def upload(self, ctx, name, url):
         """
         Upload images to commands
-        
+
         If a command does not exist, it will be created.
         If a image exists it will not be overwritten.
         Maximum size is discords 8 MB.
@@ -42,20 +42,20 @@ class Images(commands.Cog):
                 return None
             return fname[0]
 
-        # check the filesize before doing anything     
+        # check the filesize before doing anything
         resGet = requests.get(url, stream=True)
 
         if int(resGet.headers['Content-length']) > ctx.guild.filesize_limit:
             await ctx.send("The file  is too large to be uploaded in the used channel. Please use a different file.")
             await ctx.send("Allowed: {} bytes.This file: {} bytes".format(int(resGet.headers['Content-length']),
-             ctx.guild.filesize_limit))
+                                                                          ctx.guild.filesize_limit))
             return
 
         existing_cmds = self.get_existing_subfolders()
         cmd_dir = os.path.join(settings.config.data_dir, name)
         if name not in existing_cmds:
             await ctx.send("Creating command...")
-            
+
             if not self.create_dir(cmd_dir):
                 await ctx.send("Could not create directory. Please contact the bot owner.")
                 return
@@ -65,11 +65,11 @@ class Images(commands.Cog):
         # download file
         await ctx.send("Downloading file to server...")
         r = requests.get(url)
-        
+
         filename = get_filename_from_cd(r.headers.get('content-disposition'))
         if not filename:
             if url.find('/'):
-                filename =  url.rsplit('/', 1)[1]
+                filename = url.rsplit('/', 1)[1]
 
         print(filename)
 
@@ -85,12 +85,11 @@ class Images(commands.Cog):
         try:
             os.mkdir(path)
         except OSError:
-            print ("Creation of the directory %s failed" % path)
+            print("Creation of the directory %s failed" % path)
             return False
         else:
-            print ("Successfully created the directory %s " % path)
+            print("Successfully created the directory %s " % path)
             return True
-
 
     def autogenerate_cmd(self, name, helptext):
         """
@@ -98,7 +97,7 @@ class Images(commands.Cog):
         """
 
         # Add function under the command name -> name
-        # else the name 'function' will be used for all 
+        # else the name 'function' will be used for all
         # and the application will crash
         @commands.command(name=name,
                           description=helptext)
@@ -117,7 +116,7 @@ class Images(commands.Cog):
         """
         Returns the names of all subdirectories of the data dir
         """
-        return [f.name for f in os.scandir(settings.config.data_dir) if f.is_dir() ]
+        return [f.name for f in os.scandir(settings.config.data_dir) if f.is_dir()]
 
     def generate_functions(self):
         """ generate bot commands for existing image directories"""
