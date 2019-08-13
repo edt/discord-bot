@@ -10,6 +10,10 @@ import settings
 import re
 import random
 
+import logging
+
+log = logging.getLogger(__file__)
+
 
 class General(commands.Cog):
     """
