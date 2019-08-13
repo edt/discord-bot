@@ -69,4 +69,9 @@ The content should look like:
 [General]
 token = discord-bot-oauth-token
 data_dir = /usr/data/stuff
+
+[reddit]
+id =
+token =
+agent = blob-bot script v1.0 by rawplus
 ```

@@ -13,12 +13,18 @@ class Settings():
         self.token = None
         self.data_dir = None
         self.restart_scheduled = False
+        self.reddit_id = None
+        self.reddit_secret = None
+        self.reddit_agent = None
         self.load_defaults()
 
     def load_defaults(self):
         self.token = None
         self.data_dir = None
         self.restart_scheduled = False
+        self.reddit_id = None
+        self.reddit_secret = None
+        self.reddit_agent = None
 
     def load(self, configfile):
 
@@ -35,6 +41,14 @@ class Settings():
 
         self.token = gen.get("token", self.token)
         self.data_dir = gen.get("data_dir", self.data_dir)
+
+        reddit = "reddit"
+
+        red = config[reddit]
+
+        self.reddit_id = red.get("id", self.reddit_id)
+        self.reddit_secret = red.get("secret", self.reddit_secret)
+        self.reddit_agent = red.get("agent", self.reddit_agent)
 
         return True
 

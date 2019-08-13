@@ -93,6 +93,7 @@ def main():
 
     bot.load_extension("general")
     bot.load_extension("images")
+    bot.load_extension("daily_reddit")
 
     bot.run(settings.config.token)
 
