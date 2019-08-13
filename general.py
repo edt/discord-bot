@@ -149,12 +149,12 @@ class General(commands.Cog):
         """
 
         for a in args:
-            ret, val = self.roll(a)
+            ret, val = self._roll(a)
 
             if ret:
-                await ctx.send("{} = {}".format(a, val))
+                await ctx.send("```{} = {}```".format(a, val))
             else:
-                await ctx.send("Could not interpret '{}'".format(a))
+                await ctx.send("```Could not interpret '{}'```".format(a))
 
 
 def setup(bot):
