@@ -106,6 +106,14 @@ class General(commands.Cog):
         await self.bot.close()
 
     @commands.command()
+    async def shutdown(self, ctx):
+        """
+        Stop the damn thing
+        """
+        await ctx.send("My....time....has....come....")
+        await self.bot.close()
+
+    @commands.command()
     async def upgrade(self, ctx):
         """
         Upgrade the bot
