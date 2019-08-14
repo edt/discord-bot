@@ -88,7 +88,8 @@ Currently this project has the following dependencies:
 
 - discord.py
 - PRAW
+- tabulate
 
 They can be installed with the following command on Debian based systems:
 
-`sudo pip3 install discord.py praw`
+`sudo pip3 install discord.py praw tabulate`
