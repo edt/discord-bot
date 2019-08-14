@@ -12,6 +12,7 @@ class Settings():
 
         self.token = None
         self.data_dir = None
+        self.cache_dir = None
         self.restart_scheduled = False
         self.reddit_id = None
         self.reddit_secret = None
@@ -21,6 +22,7 @@ class Settings():
     def load_defaults(self):
         self.token = None
         self.data_dir = None
+        self.cache_dir = None
         self.restart_scheduled = False
         self.reddit_id = None
         self.reddit_secret = None
@@ -41,6 +43,7 @@ class Settings():
 
         self.token = gen.get("token", self.token)
         self.data_dir = gen.get("data_dir", self.data_dir)
+        self.cache_dir = gen.get("cache_dir", self.cache_dir)
 
         reddit = "reddit"
 
