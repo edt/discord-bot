@@ -75,6 +75,7 @@ The content should look like:
 [General]
 token = discord-bot-oauth-token
 data_dir = /usr/data/stuff
+cache_dir = /var/data/discord-bot/cache
 
 [reddit]
 id = reddit-app-id
