@@ -4,7 +4,7 @@ from discord.ext import commands
 import time
 import os
 import shutil
-
+import subprocess
 import settings
 
 import re
@@ -12,7 +12,20 @@ import random
 
 import logging
 
-log = logging.getLogger(__file__)
+log = logging.getLogger("blog-bot")
+
+
+class cd:
+    """Context manager for changing the current working directory"""
+    def __init__(self, newPath):
+        self.newPath = os.path.expanduser(newPath)
+
+    def __enter__(self):
+        self.savedPath = os.getcwd()
+        os.chdir(self.newPath)
+
+    def __exit__(self, etype, value, traceback):
+        os.chdir(self.savedPath)
 
 
 class General(commands.Cog):
@@ -99,7 +112,19 @@ class General(commands.Cog):
 
         This command pull the latest version via git and reboots the bot.
         """
-        await ctx.send("Not implemented")
+
+        location = os.path.realpath(__file__)
+
+        with cd(location):
+            process = subprocess.Popen(["git", "pull"], stdout=subprocess.PIPE)
+            output = process.communicate()
+
+            if process.returncode != 0:
+                await ctx.send("```Git failed. Output: {}```".format(output))
+            else:
+                await ctx.send("```Pulled updates. Rebooting```")
+                settings.config.restart_scheduled = True
+                await self.bot.close()
 
     def _roll(self, discord_string):
 
