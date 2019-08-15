@@ -18,14 +18,15 @@ import logging
 
 log = logging.getLogger(__file__)
 
+
 class RedditNewsletter():
     """"""
 
-    def __init__(self, sub, chnl, time):
+    def __init__(self, sub, chnl, post_time):
 
         self.subreddit = sub
         self.channel_id = chnl
-        self.post_time = time
+        self.post_time = post_time
 
     def to_dict(self):
 
@@ -98,37 +99,32 @@ class DailyReddit(commands.Cog):
             print("Checking if closed")
             while not self.bot.is_closed():
                 fmt = "%H:%M"
-                now = datetime.strftime(datetime.now(), fmt)
-                
-                # calculate time in seconds
-                # if remaining time is negative
-                # we calculate it for the next day
-                remaining_time = (datetime.strptime(feed.post_time, fmt) 
-                                    - datetime.strptime(now, fmt)).total_seconds() 
 
-                if (remaining_time <= 0):
-                    remaining_time = (timedelta(hours=24) - (datetime.strptime(now, fmt) - datetime.strptime(post_time, fmt))).total_seconds() 
-                
+                now = datetime.now()
+                t = datetime.strptime(feed.post_time, fmt)
+
+                remaining_time = (timedelta(hours=24) - (now - t)).total_seconds() % (24 * 3600)
+
                 print("going sleeping {} {}".format(feed.subreddit, remaining_time))
-                              
+
                 await asyncio.sleep(remaining_time)
-                
+
                 # security check
-                # we do not need to post when 
+                # we do not need to post when
                 # task is interupted
                 if (self.bot.is_closed()
                         or feed not in self.newscycle):
                     return
 
                 print("sending")
-               
+
                 top_post = self.praw.subreddit(feed.subreddit).top('day')
                 for p in top_post:
-                   await channel.send("Daily {}: {}".format(feed.subreddit, p.url))
-                   break
+                    await channel.send("Daily {}: {}".format(feed.subreddit, p.url))
+                    break
                 # wait to ensure we only trigger once per task
                 await asyncio.sleep(60)
-                
+
             print("end backgroundtask {}".format(feed.subreddit))
 
         self.bot.loop.create_task(background_task())
@@ -189,7 +185,7 @@ class DailyReddit(commands.Cog):
         except ValueError as e:
             await ctx.send("Could not parse time. {}".format(e))
             return
-        
+
         new_feed = RedditNewsletter(subreddit, ctx.channel.id, post_time)
         self.newscycle.append(new_feed)
         self.__save_newscycle()
@@ -205,7 +201,7 @@ class DailyReddit(commands.Cog):
         """
         try:
             index = int(entry)
-        except: 
+        except:
             await ctx.send("Given index is not a number!")
             return
 
