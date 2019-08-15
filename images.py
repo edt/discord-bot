@@ -9,7 +9,7 @@ import re
 # internal modules
 import settings
 
-log = logging.getLogger(__file__)
+log = logging.getLogger(__name__)
 
 
 class Images(commands.Cog):

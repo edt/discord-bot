@@ -12,7 +12,7 @@ import random
 
 import logging
 
-log = logging.getLogger("blog-bot")
+log = logging.getLogger(__name__)
 
 
 class cd:
