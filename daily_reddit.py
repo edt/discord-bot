@@ -16,7 +16,7 @@ import sys
 
 import logging
 
-log = logging.getLogger(__file__)
+log = logging.getLogger(__name__)
 
 
 class RedditNewsletter():
@@ -91,12 +91,12 @@ class DailyReddit(commands.Cog):
 
     def __start_newscycle(self, feed):
         """"""
-        print("start_newscycle {}".format(feed.subreddit))
+        log.info("starting newscycle {}".format(feed.subreddit))
 
         async def background_task():
             await self.bot.wait_until_ready()
             channel = self.bot.get_channel(int(feed.channel_id))
-            print("Checking if closed")
+
             while not self.bot.is_closed():
                 fmt = "%H:%M"
 
@@ -105,7 +105,7 @@ class DailyReddit(commands.Cog):
 
                 remaining_time = (timedelta(hours=24) - (now - t)).total_seconds() % (24 * 3600)
 
-                print("going sleeping {} {}".format(feed.subreddit, remaining_time))
+                log.info("going sleeping {} {}".format(feed.subreddit, remaining_time))
 
                 await asyncio.sleep(remaining_time)
 
@@ -116,7 +116,7 @@ class DailyReddit(commands.Cog):
                         or feed not in self.newscycle):
                     return
 
-                print("sending")
+                log.info("sending daily reddit {}".format(feed.subreddit))
 
                 top_post = self.praw.subreddit(feed.subreddit).top('day')
                 for p in top_post:
@@ -125,7 +125,7 @@ class DailyReddit(commands.Cog):
                 # wait to ensure we only trigger once per task
                 await asyncio.sleep(60)
 
-            print("end backgroundtask {}".format(feed.subreddit))
+            log.info("ending backgroundtask {}".format(feed.subreddit))
 
         self.bot.loop.create_task(background_task())
 
@@ -134,6 +134,10 @@ class DailyReddit(commands.Cog):
         Loads cache file
         """
         filename = os.path.join(settings.config.cache_dir, self.cache_file)
+
+        if not os.path.isfile(filename):
+            log.info("Reddit cache file does not exist. No tasks will be created.")
+            return
 
         with open(filename) as f:
 
