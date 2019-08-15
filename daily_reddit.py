@@ -3,7 +3,7 @@ from discord.ext import commands
 
 import os
 import praw
-import secrets
+import random
 import sched
 import asyncio
 import time
@@ -84,7 +84,7 @@ class DailyReddit(commands.Cog):
         """
 
         posts = self.praw.subreddit(sub).hot(limit=30)
-        random_post_number = secrets.randbelow(30)
+        random_post_number = random.randrange(30)
         for i, post in enumerate(posts):
             if i == random_post_number:
                 await ctx.message.channel.send(post.url)
@@ -214,7 +214,7 @@ class DailyReddit(commands.Cog):
         @commands.command(name=cmd)
         async def red_(ctx):
             posts = self.praw.subreddit(cmd).hot(limit=30)
-            random_post_number = secrets.randbelow(30)
+            random_post_number = random.randrange(30)
             for i, post in enumerate(posts):
                 if i == random_post_number:
                     await ctx.message.channel.send(post.url)
@@ -227,8 +227,6 @@ class DailyReddit(commands.Cog):
 
         for cmd in cmds:
             self.generate_cmd(cmd, "")
-
-        inspect.getmembers(self.reddit)
 
 
 def setup(bot):
