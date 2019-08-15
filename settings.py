@@ -17,6 +17,10 @@ class Settings():
         self.reddit_id = None
         self.reddit_secret = None
         self.reddit_agent = None
+
+        self.git_user = None
+        self.git_email = None
+
         self.load_defaults()
 
     def load_defaults(self):
@@ -27,6 +31,8 @@ class Settings():
         self.reddit_id = None
         self.reddit_secret = None
         self.reddit_agent = None
+        self.git_user = None
+        self.git_email = None
 
     def load(self, configfile):
 
@@ -52,6 +58,11 @@ class Settings():
         self.reddit_id = red.get("id", self.reddit_id)
         self.reddit_secret = red.get("secret", self.reddit_secret)
         self.reddit_agent = red.get("agent", self.reddit_agent)
+
+        git = config["git"]
+
+        self.git_user = git.get("name", self.git_name)
+        self.git_email = git.get("email", self.git_mail)
 
         return True
 

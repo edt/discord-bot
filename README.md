@@ -81,6 +81,10 @@ cache_dir = /var/data/discord-bot/cache
 id = reddit-app-id
 token = reddit-app-auth-token
 agent = blob-bot script v1.0 by rawplus
+
+[git]
+user = Jack Black
+email = jack@black.com
 ```
 
 ## Dependencies
