@@ -124,6 +124,20 @@ class General(commands.Cog):
         location = os.path.realpath(__file__)
 
         with cd(location):
+
+            process_name = subprocess.Popen(["git", "config", "--get", "user.name"], stdout=subprocess.PIPE)
+            output = process_name.communicate()
+            process_mail = subprocess.Popen(["git", "config", "--get", "user.email"], stdout=subprocess.PIPE)
+            output = process_mail.communicate()
+
+            if (process_mail != 0
+                    or process_name != 0):
+                log.warn("Git user is not defined. Compensating")
+                process_name = subprocess.Popen(["git", "config", "user.name", settings.config.git_user],
+                                                stdout=subprocess.PIPE)
+                process_mail = subprocess.Popen(["git", "config", "user.email", settings.config.git_email],
+                                                stdout=subprocess.PIPE)
+
             process = subprocess.Popen(["git", "pull"], stdout=subprocess.PIPE)
             output = process.communicate()
 
