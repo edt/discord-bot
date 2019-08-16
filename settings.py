@@ -3,7 +3,7 @@ import logging
 import os
 import time
 
-log = logging.getLogger(__file__)
+log = logging.getLogger(__name__)
 
 
 class Settings():
