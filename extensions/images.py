@@ -9,7 +9,7 @@ import re
 # internal modules
 import settings
 
-log = logging.getLogger(__name__)
+log = logging.getLogger("discord-bot")
 
 
 class Images(commands.Cog):
