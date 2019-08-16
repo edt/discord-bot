@@ -93,6 +93,13 @@ class General(commands.Cog):
         await ctx.send(status_msg)
 
     @commands.command()
+    async def log(self, ctx):
+        """
+        Upload the latest log file.
+        """
+        await ctx.message.channel.send(file=discord.File(settings.config.logfile))
+
+    @commands.command()
     async def reboot(self, ctx):
         """
         Reboot the bot.

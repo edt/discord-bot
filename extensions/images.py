@@ -73,8 +73,6 @@ class Images(commands.Cog):
             if url.find('/'):
                 filename = url.rsplit('/', 1)[1]
 
-        print(filename)
-
         # TODO: filename checking/ uniqueness ensurance
 
         with open(os.path.join(cmd_dir, filename), 'wb') as f:
@@ -87,10 +85,10 @@ class Images(commands.Cog):
         try:
             os.mkdir(path)
         except OSError:
-            print("Creation of the directory %s failed" % path)
+            log.error("Creation of the directory %s failed" % path)
             return False
         else:
-            print("Successfully created the directory %s " % path)
+            log.info("Successfully created the directory %s " % path)
             return True
 
     def autogenerate_cmd(self, name, helptext):
