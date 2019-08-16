@@ -85,7 +85,7 @@ def init():
 
     arguments = parser.parse_args()
 
-    settings.init(str(arguments.config.name))
+    settings.init(str(arguments.config.name), os.path.dirname(os.path.realpath(__file__)))
 
     # set default logging level to WARN. each new -v increases the log level
     level = arguments.verbose_count * 10

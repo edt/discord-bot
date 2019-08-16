@@ -8,7 +8,7 @@ log = logging.getLogger(__name__)
 
 class Settings():
 
-    def __init__(self):
+    def __init__(self, basedir):
 
         self.token = None
         self.data_dir = None
@@ -21,18 +21,22 @@ class Settings():
         self.git_user = None
         self.git_email = None
 
+        self.logfile = None
+        self.basedir = basedir
         self.load_defaults()
 
     def load_defaults(self):
         self.token = None
-        self.data_dir = None
-        self.cache_dir = None
+        self.data_dir = self.basedir + "/data"
+        self.cache_dir = self.basedir + "/cache"
         self.restart_scheduled = False
         self.reddit_id = None
         self.reddit_secret = None
         self.reddit_agent = None
         self.git_user = None
         self.git_email = None
+
+        self.logfile = self.basedir + "/logfile.log"
 
     def load(self, configfile):
 
@@ -51,6 +55,8 @@ class Settings():
         self.data_dir = os.path.expanduser(gen.get("data_dir", self.data_dir))
         self.cache_dir = os.path.expanduser(gen.get("cache_dir", self.cache_dir))
 
+        self.logfile = os.path.expanduser(gen.get("logfile", self.logfile))
+
         reddit = "reddit"
 
         red = config[reddit]
@@ -67,13 +73,13 @@ class Settings():
         return True
 
 
-def init(configfile):
+def init(configfile, basedir):
 
     global start_time
     start_time = time.time()
 
     global config
-    config = Settings()
+    config = Settings(basedir)
     if not config.load(configfile):
         log.error("Unable to load config")
         return False
