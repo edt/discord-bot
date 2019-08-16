@@ -128,7 +128,7 @@ class General(commands.Cog):
         This command pull the latest version via git and reboots the bot.
         """
 
-        location = os.path.realpath(__file__)
+        location = os.path.dirname(os.path.realpath(__file__))
 
         with cd(location):
 
