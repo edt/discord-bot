@@ -47,7 +47,7 @@ async def on_command_error(ctx, error):
 async def on_error(event, *args, **kwargs):
     message = args[0]  # Gets the message object
     log.warning(traceback.format_exc())  # logs the error
-    await bot.send_message(message.channel, "You caused an error! {}".format(message))
+    await message.channel.send("You caused an error! {}".format(message))
 
 
 def init():
