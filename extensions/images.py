@@ -45,6 +45,7 @@ class Images(commands.Cog):
         self.help_texts = t.as_dict()
 
     def __write_help_texts(self):
+        log.info("Writing help texts")
         parser = configparser.ConfigParser()
         parser.add_section("help_texts")
 
@@ -53,6 +54,7 @@ class Images(commands.Cog):
 
         with open(self.help_file, "w") as f:
             parser.write(f)
+        log.info("Wrote help texts.")
 
     @commands.command()
     async def description(self, ctx, name, desc):
@@ -62,9 +64,9 @@ class Images(commands.Cog):
         if name not in self.get_commands():
             ctx.send("Command does not exist!")
             return
-
+        log.info("Adding help text for command")
         self.help_texts[name] = desc
-
+        log.info("Added. Saving texts.")
         self.__write_help_texts()
         ctx.send("```Added description for command {}```".format(name))
 
