@@ -8,6 +8,7 @@ import requests
 import re
 # internal modules
 import settings
+import configparser
 
 log = logging.getLogger("discord-bot")
 
@@ -19,9 +20,53 @@ class Images(commands.Cog):
     """
     def __init__(self, bot):
         self.bot = bot
+        self.help_file = os.path.join(settings.config.data_dir, "help_texts.ini")
+        self.help_texts = {}
+        self.__load_help_texts()
         self.generate_functions()
 
         self.max_filesize = 8388608  # 8MB in bytes
+
+    def __load_help_texts(self):
+        """
+        
+        """
+        if not os.path.isfile(self.help_file):
+            log.info("help_texts.ini file does not exist in the data_dir")
+            return
+
+        #with open(self.help_file) as f:
+        parser = configparser.ConfigParser()
+
+        parser.read(self.help_file)
+
+        t = parser["help_texts"]
+
+        self.help_texts = t.as_dict()
+
+    def __write_help_texts(self):
+        parser = configparser.ConfigParser()
+        parser.add_section("help_texts")
+
+        for key in self.help_texts.keys():
+            parser.set("help_texts", key, self.help_texts[key])
+
+        with open(self.help_file, "w") as f:
+            parser.write(f)
+
+    @commands.command()
+    async def description(self, ctx, name, desc):
+        """
+        Add a description text to an image category
+        """
+        if name not in self.cog.get_commands():
+            ctx.send("Command does not exist!")
+            return
+
+        self.help_texts[name] = desc
+
+        self.__write_help_texts()
+        ctx.send("```Added description for command {}```".format(name))
 
     @commands.command()
     async def upload(self, ctx, name, url):
