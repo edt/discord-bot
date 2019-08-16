@@ -21,6 +21,8 @@ class Images(commands.Cog):
         self.bot = bot
         self.generate_functions()
 
+        self.max_filesize = 8388608  # 8MB in bytes
+
     @commands.command()
     async def upload(self, ctx, name, url):
         """
@@ -45,7 +47,7 @@ class Images(commands.Cog):
         # check the filesize before doing anything
         resGet = requests.get(url, stream=True)
 
-        if int(resGet.headers['Content-length']) > ctx.guild.filesize_limit:
+        if int(resGet.headers['Content-length']) > self.max_filesize:
             await ctx.send("The file  is too large to be uploaded in the used channel. Please use a different file.")
             await ctx.send("Allowed: {} bytes.This file: {} bytes".format(int(resGet.headers['Content-length']),
                                                                           ctx.guild.filesize_limit))
@@ -116,10 +118,16 @@ class Images(commands.Cog):
         """
         Returns the names of all subdirectories of the data dir
         """
+
         return [f.name for f in os.scandir(settings.config.data_dir) if f.is_dir()]
 
     def generate_functions(self):
         """ generate bot commands for existing image directories"""
+
+        if not os.path.exists(settings.config.data_dir):
+            log.error("data_dir does not exist.")
+            return
+            # os.makedirs(directory)
 
         for subdir in self.get_existing_subfolders():
             self.autogenerate_cmd(subdir, "")

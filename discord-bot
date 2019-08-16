@@ -100,10 +100,13 @@ def main():
 
     init()
 
-    bot.load_extension("general")
-    bot.load_extension("images")
-    bot.load_extension("daily_reddit")
+    log.info("Loading extensions")
 
+    bot.load_extension("extensions.general")
+    bot.load_extension("extensions.images")
+    bot.load_extension("extensions.daily_reddit")
+
+    log.info("Starting bot run")
     bot.run(settings.config.token)
 
     if settings.config.restart_scheduled:
