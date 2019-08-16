@@ -59,7 +59,7 @@ class Images(commands.Cog):
         """
         Add a description text to an image category
         """
-        if name not in self.cog.get_commands():
+        if name not in self.get_commands():
             ctx.send("Command does not exist!")
             return
 
@@ -93,6 +93,7 @@ class Images(commands.Cog):
         resGet = requests.get(url, stream=True)
 
         if int(resGet.headers['Content-length']) > self.max_filesize:
+
             await ctx.send("The file  is too large to be uploaded in the used channel. Please use a different file.")
             await ctx.send("Allowed: {} bytes.This file: {} bytes".format(int(resGet.headers['Content-length']),
                                                                           ctx.guild.filesize_limit))
@@ -172,8 +173,15 @@ class Images(commands.Cog):
             return
             # os.makedirs(directory)
 
+
         for subdir in self.get_existing_subfolders():
-            self.autogenerate_cmd(subdir, "")
+
+            helptext = ""
+
+            if subdir in self.help_texts:
+                helptext = self.help_texts[subdir]
+
+            self.autogenerate_cmd(subdir, helptext)
 
 
 def setup(bot):
