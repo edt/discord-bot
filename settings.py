@@ -61,8 +61,8 @@ class Settings():
 
         git = config["git"]
 
-        self.git_user = git.get("name", self.git_name)
-        self.git_email = git.get("email", self.git_mail)
+        self.git_user = git.get("name", self.git_user)
+        self.git_email = git.get("email", self.git_email)
 
         return True
 
