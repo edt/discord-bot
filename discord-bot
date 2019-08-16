@@ -90,11 +90,19 @@ def init():
     # set default logging level to WARN. each new -v increases the log level
     level = arguments.verbose_count * 10
 
-    logging.basicConfig(format='%(asctime)s,%(msecs)d %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s',
-                        datefmt='%d-%m-%Y:%H:%M:%S',
-                        level=level)
+    log.setLevel(logging.INFO)
+    logging.basicConfig(format='%(asctime)s: %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s',
+                        datefmt='%Y-%m-%d:%H:%M:%S',
+                        level=logging.INFO)
+    lf = logging.Formatter('[%(asctime)s] [%(filename)16s:%(lineno)3d] [%(levelname)8s] - %(message)s')
 
-    logging.getLogger('discord').setLevel(logging.WARNING)
+    handler = RotatingFileHandler(settings.config.logfile,
+                                  maxBytes=8388608,
+                                  backupCount=2)
+    handler.setFormatter(lf)
+    log.addHandler(handler)
+    dl = logging.getLogger('discord')
+    dl.setLevel(logging.WARNING)
 
 
 def main():
