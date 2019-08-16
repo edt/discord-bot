@@ -48,8 +48,8 @@ class Settings():
         gen = config[general]
 
         self.token = gen.get("token", self.token)
-        self.data_dir = gen.get("data_dir", self.data_dir)
-        self.cache_dir = gen.get("cache_dir", self.cache_dir)
+        self.data_dir = os.path.expanduser(gen.get("data_dir", self.data_dir))
+        self.cache_dir = os.path.expanduser(gen.get("cache_dir", self.cache_dir))
 
         reddit = "reddit"
 
