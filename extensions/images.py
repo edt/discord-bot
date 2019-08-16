@@ -42,7 +42,7 @@ class Images(commands.Cog):
 
         t = parser["help_texts"]
 
-        self.help_texts = t.as_dict()
+        self.help_texts = dict(t)
 
     def __write_help_texts(self):
         log.info("Writing help texts")
@@ -61,14 +61,29 @@ class Images(commands.Cog):
         """
         Add a description text to an image category
         """
-        if name not in self.get_commands():
-            ctx.send("Command does not exist!")
+        exists = False
+        # for cmd in self.get_commands():
+        #     await ctx.send(cmd.name)
+        #     if name == cmd.name:
+        #         exists = True
+        #         break
+
+        cmd = self.bot.get_command(name)
+
+        if cmd:
+            exists = True
+
+        if not exists:
+            await ctx.send("Command does not exist! ")
             return
         log.info("Adding help text for command")
         self.help_texts[name] = desc
         log.info("Added. Saving texts.")
         self.__write_help_texts()
-        ctx.send("```Added description for command {}```".format(name))
+
+        cmd.help = desc
+        cmd.brief = desc.partition('\n')[0]
+        await ctx.send("```Added description for command {}```".format(name))
 
     @commands.command()
     async def upload(self, ctx, name, url):
@@ -143,12 +158,13 @@ class Images(commands.Cog):
         """
         Adds a single command to the Image category
         """
-
+        log.info("Adding dynamic command {} - {}".format(name, helptext))
         # Add function under the command name -> name
         # else the name 'function' will be used for all
         # and the application will crash
         @commands.command(name=name,
-                          description=helptext)
+                          description=helptext,
+                          brief=helptext.partition('\n')[0])
         async def function(self, ctx):
             folder = os.path.join(settings.config.data_dir, name)
             filename = random.choice(os.listdir(folder))
