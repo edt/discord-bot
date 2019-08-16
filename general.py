@@ -180,9 +180,9 @@ class General(commands.Cog):
             # add modifier and output result
             total += dice_mod
 
-            return True, total
+            return True, result_list, dice_mod, total
         else:
-            return False, 0
+            return False, 0, 0, 0
 
     @commands.command()
     async def roll(self, ctx, *args):
@@ -196,10 +196,10 @@ class General(commands.Cog):
         """
 
         for a in args:
-            ret, val = self._roll(a)
+            ret, vals, mod, res = self._roll(a)
 
             if ret:
-                await ctx.send("```{} = {}```".format(a, val))
+                await ctx.send("```{a} = {v} + {m} = {r}```".format(a=a, v=vals, m=mod, r=res))
             else:
                 await ctx.send("```Could not interpret '{}'```".format(a))
 
