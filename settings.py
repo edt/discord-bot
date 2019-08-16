@@ -33,8 +33,8 @@ class Settings():
         self.reddit_id = None
         self.reddit_secret = None
         self.reddit_agent = None
-        self.git_user = None
-        self.git_email = None
+        self.git_user = "discord-bot-auto"
+        self.git_email = "discord-bot@localhost"
 
         self.logfile = self.basedir + "/logfile.log"
 
@@ -65,10 +65,11 @@ class Settings():
         self.reddit_secret = red.get("secret", self.reddit_secret)
         self.reddit_agent = red.get("agent", self.reddit_agent)
 
-        git = config["git"]
+        if config.has_section("git"):
+            git = config["git"]
 
-        self.git_user = git.get("name", self.git_user)
-        self.git_email = git.get("email", self.git_email)
+            self.git_user = git.get("name", self.git_user)
+            self.git_email = git.get("email", self.git_email)
 
         return True
 
