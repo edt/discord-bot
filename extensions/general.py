@@ -160,7 +160,7 @@ class General(commands.Cog):
         regex = r'(\d+)[dDwW](\d+)([+-]\d+)?$'
         dice_string = re.search(regex, discord_string)
 
-        print(dice_string)
+        log.info("New dice roll: {}".format(dice_string))
 
         # Proceed if regex matched, send error message otherwise
         if dice_string:
