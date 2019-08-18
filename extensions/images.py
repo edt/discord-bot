@@ -111,9 +111,13 @@ class Images(commands.Cog):
 
         if int(resGet.headers['Content-length']) > self.max_filesize:
 
-            await ctx.send("The file  is too large to be uploaded in the used channel. Please use a different file.")
+            await ctx.send("The file is too large to be uploaded in the used channel. Please use a different file.")
             await ctx.send("Allowed: {} bytes.This file: {} bytes".format(int(resGet.headers['Content-length']),
                                                                           ctx.guild.filesize_limit))
+            return
+
+        if not any(x in resGet.headers['Content-Type'] for x in ["video", "image"]):
+            await ctx.send("""```'Content-Type' is neither image not video but '{}' instead.\nUpload aborted.```""".format(resGet.headers['Content-Type']))
             return
 
         existing_cmds = self.get_existing_subfolders()
