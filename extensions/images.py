@@ -9,6 +9,7 @@ import re
 # internal modules
 import settings
 import configparser
+import uuid
 
 log = logging.getLogger("discord-bot")
 
@@ -29,7 +30,7 @@ class Images(commands.Cog):
 
     def __load_help_texts(self):
         """
-        
+
         """
         if not os.path.isfile(self.help_file):
             log.info("help_texts.ini file does not exist in the data_dir")
@@ -140,8 +141,13 @@ class Images(commands.Cog):
             if url.find('/'):
                 filename = url.rsplit('/', 1)[1]
 
-        # TODO: filename checking/ uniqueness ensurance
+        # create a unique filename before saving
 
+        filename, file_extension = os.path.splitext(filename)
+        # file_extension contains the '.'
+        filename = str(uuid.uuid4()) + file_extension
+
+        log.info("Saving file {}")
         with open(os.path.join(cmd_dir, filename), 'wb') as f:
             f.write(r.content)
 
