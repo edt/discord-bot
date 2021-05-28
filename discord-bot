@@ -114,6 +114,7 @@ def main():
     bot.load_extension("extensions.general")
     bot.load_extension("extensions.images")
     bot.load_extension("extensions.daily_reddit")
+    bot.load_extension("extensions.poll")
 
     log.info("Starting bot run")
     bot.run(settings.config.token)
