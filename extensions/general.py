@@ -142,6 +142,9 @@ class General(commands.Cog):
 
         This command pull the latest version via git and reboots the bot.
         """
+        if not settings.is_admin(ctx.message.author.id):
+            await ctx.send("You are not a registered admin! {}".format(ctx.message.author.id))
+            return
 
         location = os.path.dirname(os.path.realpath(__file__))
 
