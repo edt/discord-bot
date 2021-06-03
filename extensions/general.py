@@ -100,6 +100,10 @@ class General(commands.Cog):
         """
         Upload the latest log file.
         """
+        if not settings.is_admin(ctx.message.author.id):
+            await ctx.send("You are not a registered admin! {}".format(ctx.message.author.id))
+            return
+
         await ctx.message.channel.send(file=discord.File(settings.config.logfile))
 
     @commands.command()
@@ -109,6 +113,10 @@ class General(commands.Cog):
 
         Have you tried turning it off and on again?
         """
+        if not settings.is_admin(ctx.message.author.id):
+            await ctx.send("You are not a registered admin! {}".format(ctx.message.author.id))
+            return
+
         await ctx.send("Reboot scheduled.")
         settings.config.restart_scheduled = True
         # closes main loop. actual reboot has to be done there
@@ -120,6 +128,10 @@ class General(commands.Cog):
         """
         Stop the damn thing
         """
+        if not settings.is_admin(ctx.message.author.id):
+            await ctx.send("You are not a registered admin! {}".format(ctx.message.author.id))
+            return
+
         await ctx.send("My....time....has....come....")
         await self.bot.close()
 

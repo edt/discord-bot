@@ -71,7 +71,21 @@ class Settings():
             self.git_user = git.get("name", self.git_user)
             self.git_email = git.get("email", self.git_email)
 
+        if config.has_section("Administration"):
+            self.admins = config.get('Administration', 'admin').split(',')
+        else:
+            self.admins = []
+
+        log.info("Admin IDs are: {}".format(self.admins))
+
         return True
+
+
+def is_admin(user_id):
+
+    if str(user_id) in config.admins:
+        return True
+    return False
 
 
 def init(configfile, basedir):
