@@ -84,11 +84,14 @@ class General(commands.Cog):
 
         Uptime: {time}
 
+        discord.py version: {disc_vers}
+
         Static data: {data:6.4f} GB
         Free disk space: {disk:6.4f} GB
         """.format(data=folder_size / (1024.0**3),
                    disk=(disk_free / (1024.0**3)),
-                   time=uptime_to_str(get_uptime()))
+                   time=uptime_to_str(get_uptime()),
+                   disc_vers=discord.version_info)
 
         await ctx.send(status_msg)
 
