@@ -50,6 +50,25 @@ async def on_error(event, *args, **kwargs):
     await message.channel.send("You caused an error! {}".format(message.content))
 
 
+praise_counter = 0
+praise_max = 2
+
+
+@bot.event
+async def on_message(message):
+    global praise_counter
+    # do some extra stuff here
+    if message.content == "\\o/" and message.author != bot.user:
+        praise_counter += 1
+        if praise_counter >= praise_max:
+            praise_counter = 0
+            await message.channel.send("\\o/")
+    else:
+        praise_counter = 0
+
+    await bot.process_commands(message)
+
+
 def init():
     """"""
 
