@@ -75,14 +75,15 @@ class Poll(commands.Cog):
         return self.find_options(message, options)
 
     # @commands.Cog.listener()
-    @commands.cooldown(2, 60, BucketType.user)
+    @commands.cooldown(2, 30, BucketType.user)
     @commands.command(name="poll")
     # Limit how often a command can be used, (num per, seconds, BucketType.default/user/member/guild/channel/role)
     async def poll(self, ctx):
         message = ctx.message
         if not message.author.bot:
             # if message.content.startswith("+poll") or message.content.startswith("poll:") or message.content.startswith("Poll:") or message.content.startswith("+poll:") or message.content.startswith("+Poll:"):
-            if message.content.startswith("?poll") or message.content.startswith("poll:") or message.content.startswith("Poll:") or message.content.startswith("+poll:") or message.content.startswith("+Poll:"):
+            # if message.content.startswith("?poll") or message.content.startswith("poll:") or message.content.startswith("Poll:") or message.content.startswith("+poll:") or message.content.startswith("+Poll:"):
+            if True:
                 messageContent = message.clean_content
                 if messageContent.find("[") == -1:
                     await message.add_reaction('👍')
