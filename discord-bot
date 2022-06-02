@@ -49,10 +49,13 @@ async def on_error(event, *args, **kwargs):
     log.warning(traceback.format_exc())  # logs the error
     await message.channel.send("You caused an error! {}".format(message.content))
 
-
+# vars for \o/
 praise_counter = 0
 praise_max = 2
 
+# vars for :D
+laugh_counter = 0
+laugh_max = 2
 
 @bot.event
 async def on_message(message):
@@ -63,8 +66,14 @@ async def on_message(message):
         if praise_counter >= praise_max:
             praise_counter = 0
             await message.channel.send("\\o/")
+    elif message.content == ":D" and message.author != bot.user:
+        laugh_counter += 1
+        if laugh_counter >= laugh_max:
+            laugh_counter = 0
+            await message.channel.send(":D")
     else:
         praise_counter = 0
+        laugh_counter = 0
 
     await bot.process_commands(message)
 
