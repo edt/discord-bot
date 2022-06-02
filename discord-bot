@@ -60,6 +60,7 @@ laugh_max = 2
 @bot.event
 async def on_message(message):
     global praise_counter
+    global laugh_counter
     # do some extra stuff here
     if message.content == "\\o/" and message.author != bot.user:
         praise_counter += 1
