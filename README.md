@@ -94,4 +94,13 @@ Currently this project has the following dependencies:
 
 They can be installed with the following command on Debian based systems:
 
-`sudo pip3 install discord.py praw tabulate`
+`sudo pip3 install -r requirements.txt`
+
+## Setup
+
+    python -m venv venv
+    source ./venv/vin/active
+    pip install -r ./discord-bot/requirements.txt
+    ./discord-bot/discord-bot
+    
+This assumes a working `settings.ini` in the discord-bot directory!
